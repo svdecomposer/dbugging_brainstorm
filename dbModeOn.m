@@ -22,6 +22,15 @@ function dbModeOn(inputFolder,exceptionNames)
 % email: juangpc@gmail.com
 % May 2019; 
 %------------- BEGIN CODE --------------
+
+if ~exist('exceptionNames','var')
+  exceptionNames={};
+end
+
+if ~exist('inputFolder','var')
+  inputFolder=pwd;
+end
+
 fileList=[];
 currentFolder=pwd;
 fileList=searchForFiles(fileList,inputFolder);
