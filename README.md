@@ -5,7 +5,7 @@ A tool to set a breakpoint in every file in a set of folders.
 Use it in combination with:  "dbclear all" to clear all breakpoints at any given moment.
 
 
-**Usage with Brainstorm**
+**Usage with Brainstorm Toolbox**
 
 Create a matlab script to call the actual function. --> dbOn.m
 Keep updating the files... call dbOn or 'dbclear all'
