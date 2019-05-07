@@ -16,12 +16,12 @@ function dbon(configFile)
 %         dbon and dboff scripts. Easy to remember and to type.
 %
 %
-% Inputs: the configuration file. Only its name.
+% Inputs: Name of the the configuration file.
 %           [DEFAULT NAME] : '.dbProject'
 %
 %          The structure of the configuration file is as follows. 
 %
-%          ::entryPointFolder  
+%          ::entryPointFolder
 %          The first line of the txt file should start with '::' and 
 %          followed by the name of the folder to server as entry point
 %          folder where the search for .m files starts.
@@ -35,6 +35,15 @@ function dbon(configFile)
 %          add information. It can be because you already know what 
 %          they do, or because they are self-explanatory, or irrelevant. 
 %          Either way you don't want the execution to stop at that files.
+          
+%          Comments are indicated with a '::' symbol after which every 
+%          character will be discarded.
+%
+%          ::fin
+%          The '::fin' string indicates the last part of the document which
+%          will be read by the parser. You can write comments or previous
+%          working lists there on, it won't affect the actual working list
+%          of files.
 %
 % Outputs:
 %    [No outputs]
@@ -65,11 +74,15 @@ else
   end
   avoidList={};
   fi=fgetl(fid);
-  while fi ~= -1
+  while fi ~= -1 || isempty(fi)
     if strcmp(fi,'::fin')
       break
     end
-    avoidList=cat(2,avoidList,{fi});
+    if isempty(fi)
+      continue
+    end
+    fi_spl=split(fi,'::'); %look for comment mark
+    avoidList=cat(2,avoidList,strtrim(fi_spl(1))); %%trim spaces begining or ending
     fi=fgetl(fid);
   end
   fclose(fid);

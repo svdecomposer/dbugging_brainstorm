@@ -30,16 +30,18 @@ To clear all breakpoint set.
  It is just an alias for "dbclear all".
 
 # Config file example
-The first line of the config file must start with '::' and show the entry folder. 
+The first line of the config file must start with '::' and show the name of the entry folder. 
 Subsequent lines express files where a breakpoint must NOT be set. A '::fin' string sets the last line that will be read from the configuration file. Anything written that point on will be discarded.
 That part of the file can then be used to save previous file lists, and text notes.
 
 ```text
-::toolbox_folder
-panel_realtime
-macro_method
-java_call
-java_create
+::toolbox_interesting_folder_name
+panel_realtime    ::There is bug here
+java_create       ::calls from gui.
+bst_call          ::calls from gui also
+tree_callbacks
+bst_get
+bst_fullfile
 ::fin
 Anything written this point on will be disregarded by the application.
 qwerty
