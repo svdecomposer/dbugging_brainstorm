@@ -48,7 +48,7 @@ function dbon(configFile)
 %------------- BEGIN CODE --------------
 
 if ~exist('configFile','var')
-  configFile='_.dbProject';
+  configFile='.dbProject';
 end
 
 fid=fopen(configFile);
@@ -72,7 +72,7 @@ else
 end
 
 flist=[];
-fileStopList=searchForFiles(entryPointFolder,flist);
+fileStopList=searchForFiles(fullfile(pwd,entryPointFolder),flist);
 
 for fi=1:length(fileStopList)
   [~,name,ext] = fileparts(fileStopList{fi});
