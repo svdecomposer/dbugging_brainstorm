@@ -43,6 +43,7 @@ function dbon(configFile)
 %    >> dbon('.dbProject')
 %
 % Author: Juan Garcia-Prieto
+% Project: https://github.com/svdecomposer/dbugging_matlab_projects
 % email: juangpc@gmail.com
 % May 2019;
 %------------- BEGIN CODE --------------
