@@ -38,6 +38,8 @@ java_call
 java_create
 ```
 
+If no config file is found, the entry point will be the actual folder, and every .m file found will have a breakpoint.
+
 Hope it is useful to your purposes. 
 # Happy debugging!
 
