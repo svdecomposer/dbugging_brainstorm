@@ -35,5 +35,5 @@ java_create
 ```
 
 
-# HappyHappy debugging!
+# Happy debugging!
 
