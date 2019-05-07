@@ -3,7 +3,7 @@ A tool to set a breakpoint in every file in a set of folders and subfolders.
 
 Use it in combination with a configuration file (by default .dbProject
 
-##Description
+#Description
 The tool has only two functions. Hope it is useful to your purposes. 
 
 ```matlab
@@ -25,7 +25,7 @@ First line starts with "::" followd by the address of the folder where one wants
 ```
 Will clear all breakpoints. It is an alias for "dbclear all".
 
-##Config file example
+#Config file example
 ```text
 ::toolbox
 panel_realtime
@@ -35,5 +35,5 @@ java_create
 ```
 
 
-##HappyHappy debugging!
+#HappyHappy debugging!
 
