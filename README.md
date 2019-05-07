@@ -27,7 +27,7 @@ Will clear all breakpoints. It is an alias for "dbclear all".
 
 # Config file example
 ```text
-::toolbox
+::toolbox_folder
 panel_realtime
 macro_method
 java_call
