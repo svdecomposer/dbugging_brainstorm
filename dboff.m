@@ -1,6 +1,6 @@
-% script DBOFF to debug a matlab project.
+% alias script 'dboff' as 'dbclear all' to debug a matlab project.
 %
-% Syntax:  script
+% Syntax: alias script
 %         This script is just an alias for dbclear all. It clears all the
 %         breaking points enabled in matlab.
 %   
@@ -11,7 +11,7 @@
 %    [No outputs]
 %
 % Example: 
-%    >> dbon  
+%    >> dboff  
 %
 % Other m-files required: dbModeOn
 %
