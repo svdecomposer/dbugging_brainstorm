@@ -30,12 +30,25 @@ To clear all breakpoint set.
  It is just an alias for "dbclear all".
 
 # Config file example
+The first line of the config file must start with '::' and show the entry folder. 
+Subsequent lines express files where a breakpoint must NOT be set. A '::fin' string sets the last line that will be read from the configuration file. Anything written that point on will be discarded.
+That part of the file can then be used to save previous file lists, and text notes.
+
 ```text
 ::toolbox_folder
 panel_realtime
 macro_method
 java_call
 java_create
+::fin
+Anything written this point on will be disregarded by the application.
+qwerty
+adsdfg
+>>>Setup June 10th:
+panel_realtime
+macro_method
+>>>Initial notes on java files.. etc...
+java_call
 ```
 
 If no config file is found, the entry point will be the actual folder, and every .m file found will have a breakpoint.
