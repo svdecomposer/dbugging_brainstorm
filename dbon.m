@@ -66,6 +66,9 @@ else
   avoidList={};
   fi=fgetl(fid);
   while fi ~= -1
+    if strcmp(fi,'::fin')
+      break
+    end
     avoidList=cat(2,avoidList,{fi});
     fi=fgetl(fid);
   end
