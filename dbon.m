@@ -6,8 +6,8 @@ function dbon(configFile)
 %
 % Syntax:  dbon(configFile)
 %
-% Description: The script declares a variable files_not_to_stop which is a 
-%         cell array with names of .m files in a matlab project where one 
+% Description: The script declares a variable files_not_to_stop which is a
+%         cell array with names of .m files in a matlab project where one
 %         does not want to set a break point for debuggin porpusese. Typically
 %         you want to freeze all functions of a project except the ones
 %         that are self explanatory or you have already studied.
@@ -19,24 +19,24 @@ function dbon(configFile)
 % Inputs: Name of the the configuration file.
 %           [DEFAULT NAME] : '.dbProject'
 %
-%          The structure of the configuration file is as follows. 
+%          The structure of the configuration file is as follows.
 %
 %          ::entryPointFolder
-%          The first line of the txt file should start with '::' and 
+%          The first line of the txt file should start with '::' and
 %          followed by the name of the folder to server as entry point
 %          folder where the search for .m files starts.
 %          This program searches (recursively) for .m files and sets a
 %          breakpoint at the first line of each file.
-% 
-%          listOfFilesToAvoid 
+%
+%          listOfFilesToAvoid
 %          Following the first line, each new line will contain the
-%          name of a .m file to exclude from the debugging process. 
-%          Typically, some files in a project don't necesarily 
-%          add information. It can be because you already know what 
-%          they do, or because they are self-explanatory, or irrelevant. 
+%          name of a .m file to exclude from the debugging process.
+%          Typically, some files in a project don't necesarily
+%          add information. It can be because you already know what
+%          they do, or because they are self-explanatory, or irrelevant.
 %          Either way you don't want the execution to stop at that files.
-          
-%          Comments are indicated with a '::' symbol after which every 
+
+%          Comments are indicated with a '::' symbol after which every
 %          character will be discarded.
 %
 %          ::fin
@@ -61,67 +61,83 @@ if ~exist('configFile','var')
   configFile='.dbProject';
 end
 
+[entryPointFolder,avoidList]=parseConfigFile(configFile);
+
+fileStopList=searchForFiles(fullfile(pwd,entryPointFolder));
+
+for fi=1:length(fileStopList)
+  [~,name,~] = fileparts(fileStopList{fi});
+  if ~any(strcmp(name,avoidList))
+    eval(['dbstop in ' fileStopList{fi}]);
+  end
+end
+
+end
+
+
+%% Function parseConfigFile
+% This function parses the folder name and the list of files to exclude. All
+% should be specified in the config file.
+function [entryPointFolder,avoidList]=parseConfigFile(configFile)
+comment_str='::';
+end_str='::fin';
 fid=fopen(configFile);
 if fid == -1
   entryPointFolder = pwd;
   avoidList = {};
 else
-  entryPointFolder=fgetl(fid);
-  if strcmp(entryPointFolder(1:2),'::')
-    entryPointFolder=entryPointFolder(3:end);
+  nline=fgetl(fid);
+  if strcmp(nline(1:2),comment_str)
+    entryPointFolder=strtrim(nline(3:end));
   else
     error(['Bad structure of configuration file: ' configFile]);
   end
   avoidList={};
-  fi=fgetl(fid);
-  while fi ~= -1 || isempty(fi)
-    if strcmp(fi,'::fin')
-      break
+  while ~feof(fid)
+    nline=fgetl(fid);
+    if ~isempty(nline)
+      if length(nline)>4 && strcmp(nline(1:5),end_str)
+        break
+      end
+      f_=split(nline,comment_str);
+      fi=strtrim(f_{1});
+      if isempty(fi)
+        continue
+      end
+      avoidList=cat(2,avoidList,{fi}); %%trim spaces begining or ending
     end
-    if isempty(fi)
-      continue
-    end
-    fi_spl=split(fi,'::'); %look for comment mark
-    avoidList=cat(2,avoidList,strtrim(fi_spl(1))); %%trim spaces begining or ending
-    fi=fgetl(fid);
   end
   fclose(fid);
 end
-
-flist=[];
-fileStopList=searchForFiles(fullfile(pwd,entryPointFolder),flist);
-
-for fi=1:length(fileStopList)
-  [~,name,ext] = fileparts(fileStopList{fi});
-  if ~any(strcmp(name,avoidList))
-    eval(['dbstop in ' fileStopList{fi}]);
-  end
-  
-end
-
 end
 
 %% Function searchForfiles
 % This function is an (inefficient) implementation of recursive breath first
-% search for .m files inside a folder. 
+% search for .m files inside a folder.
 % Inputs:
 %    entryPointFolder : folder where the search for .m files starts. It
 %                       searches (recursively) for .m files and sets a
 %                       breakpoint in each file, at the initial line.
 %
-%    listOfFilesToAvoid : name of a txt file where each line contains the 
-%               name of a .m file to exclude from the debugging process. 
-%               Typically,some files in a project don't necesarily 
-%               add information. It can be because you already know what 
-%               they do, or because they are self-explanatory, or irrelevant. 
+%    listOfFilesToAvoid : name of a txt file where each line contains the
+%               name of a .m file to exclude from the debugging process.
+%               Typically,some files in a project don't necesarily
+%               add information. It can be because you already know what
+%               they do, or because they are self-explanatory, or irrelevant.
 %               Either way you don't want the execution to stop at that files.
 %
 % Outputs:
 %    flist : The list of files found in all folders.
 %
 function flist=searchForFiles(thisFolder,flist)
+
+if ~exist('flist','var')
+  flist=[];
+end
+
 fl=dir(thisFolder);
 fl=fl(3:end);
+
 for fi=1:length(fl)
   if fl(fi).isdir
     if(fl(fi).name(1) == '.')
